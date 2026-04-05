@@ -4,39 +4,44 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout>
 
-	<!-- ── Hero ── -->
+	<!-- ── Hero (sticky — projects rise over it) ── -->
 	<section class="hero">
 		<span class="name">Waleed</span>
 
 		<div class="hero-content">
 			<h1>Hello.</h1>
-			<p class="tagline">I'm a UX Design student at the University of the Arts London.</p>
+			<p class="tagline">I'm a UX Design student at the<br />University of the Arts London.</p>
 
-			<div class="video-placeholder">
-				<span>Video coming soon</span>
+			<div class="video-invite">
+				<span class="play-icon">▶</span>
+				<span>A quick intro, if you're curious <span class="soon">— coming soon</span></span>
 			</div>
 		</div>
 
 		<div class="scroll-hint">↓</div>
 	</section>
 
-	<!-- ── Projects ── -->
+	<!-- ── Projects (rises over hero on scroll) ── -->
 	<section class="projects">
-		<h2 class="reveal">My Projects</h2>
+		<p class="projects-label reveal">Work</p>
 
-		<div class="cards">
-			<a href="#" class="card reveal">
-				<span class="card-label">UAL</span>
-				<p class="card-desc">Work from my Masters in UX Design at the University of the Arts London.</p>
-				<span class="card-link">View projects →</span>
-			</a>
+		<a href="#" class="entry reveal">
+			<span class="entry-num">01</span>
+			<div class="entry-body">
+				<h2>UAL</h2>
+				<p>Research-led work from the MA UX Design programme. Projects that sit at the intersection of systems thinking, service design, and human behaviour — developed through structured critique at the University of the Arts London.</p>
+			</div>
+			<span class="entry-arrow">↗</span>
+		</a>
 
-			<a href="#" class="card reveal">
-				<span class="card-label">Personal</span>
-				<p class="card-desc">Side projects, experiments, and things I've made outside of university.</p>
-				<span class="card-link">View projects →</span>
-			</a>
-		</div>
+		<a href="#" class="entry reveal">
+			<span class="entry-num">02</span>
+			<div class="entry-body">
+				<h2>Self-initiated</h2>
+				<p>Things made outside of briefs and deadlines. Experiments, tools, and quiet ideas built from curiosity — the kind of work that doesn't wait to be assigned.</p>
+			</div>
+			<span class="entry-arrow">↗</span>
+		</a>
 	</section>
 
 </Layout>
@@ -44,21 +49,24 @@ import Layout from '../layouts/Layout.astro';
 <style>
 	/* ── Hero ── */
 	.hero {
-		position: relative;
-		height: 95vh;
+		position: sticky;
+		top: 0;
+		height: 100vh;
+		z-index: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		padding: 2rem;
+		background: #fff;
 	}
 
 	.name {
 		position: absolute;
 		top: 2rem;
 		left: 2.5rem;
-		font-size: 0.9rem;
+		font-size: 0.8rem;
 		font-weight: 500;
-		letter-spacing: 0.08em;
+		letter-spacing: 0.1em;
 		text-transform: uppercase;
 		color: #111;
 	}
@@ -68,153 +76,169 @@ import Layout from '../layouts/Layout.astro';
 		flex-direction: column;
 		align-items: center;
 		text-align: center;
-		gap: 1.25rem;
-		max-width: 640px;
+		gap: 1.5rem;
+		max-width: 600px;
 		width: 100%;
+		will-change: opacity, transform;
 	}
 
 	h1 {
-		font-size: clamp(3rem, 8vw, 5.5rem);
+		font-size: clamp(3.5rem, 9vw, 6rem);
 		font-weight: 300;
-		letter-spacing: -0.02em;
+		letter-spacing: -0.03em;
 		line-height: 1;
 	}
 
 	.tagline {
-		font-size: clamp(1rem, 2vw, 1.2rem);
+		font-size: clamp(1rem, 1.8vw, 1.15rem);
 		font-weight: 300;
 		color: #555;
-		line-height: 1.6;
+		line-height: 1.7;
 	}
 
-	.video-placeholder {
-		margin-top: 1rem;
-		width: 100%;
-		aspect-ratio: 16 / 9;
-		border: 1.5px dashed #ccc;
-		border-radius: 8px;
+	.video-invite {
 		display: flex;
 		align-items: center;
-		justify-content: center;
+		gap: 0.5rem;
+		font-size: 0.85rem;
 		color: #aaa;
-		font-size: 0.9rem;
 		font-weight: 400;
-		letter-spacing: 0.04em;
-		background: #fafafa;
+		margin-top: 0.25rem;
+	}
+
+	.play-icon {
+		font-size: 0.65rem;
+		color: #bbb;
+	}
+
+	.soon {
+		color: #ccc;
+		font-style: italic;
 	}
 
 	.scroll-hint {
 		position: absolute;
-		bottom: 1.5rem;
+		bottom: 2rem;
 		left: 50%;
 		transform: translateX(-50%);
-		font-size: 1.2rem;
-		color: #bbb;
+		font-size: 1rem;
+		color: #ccc;
+		letter-spacing: 0.05em;
 	}
 
 	/* ── Projects ── */
 	.projects {
-		padding: 5rem 2.5rem 6rem;
-		max-width: 900px;
+		position: relative;
+		z-index: 1;
+		background: #fff;
+		padding: 4rem 2.5rem 8rem;
+		max-width: 860px;
 		margin: 0 auto;
 	}
 
-	.projects h2 {
-		font-size: clamp(1.5rem, 3vw, 2rem);
-		font-weight: 400;
-		margin-bottom: 2.5rem;
-		letter-spacing: -0.01em;
+	.projects-label {
+		font-size: 0.75rem;
+		font-weight: 500;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: #bbb;
+		margin-bottom: 2rem;
 	}
 
-	.cards {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1.25rem;
-	}
-
-	.card {
+	.entry {
 		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-		padding: 2rem;
-		border: 1px solid #e8e8e8;
-		border-radius: 10px;
+		align-items: flex-start;
+		gap: 2rem;
+		padding: 2.25rem 0;
+		border-top: 1px solid #ebebeb;
 		text-decoration: none;
 		color: inherit;
-		background: #fff;
-		transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+		transition: background 0.2s ease;
 	}
 
-	.card-label {
+	.entry:last-child {
+		border-bottom: 1px solid #ebebeb;
+	}
+
+	.entry-num {
 		font-size: 0.75rem;
-		font-weight: 600;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: #999;
+		font-weight: 400;
+		color: #ccc;
+		padding-top: 0.35rem;
+		min-width: 1.5rem;
+		transition: color 0.2s ease;
 	}
 
-	.card-desc {
-		font-size: 0.95rem;
-		line-height: 1.6;
-		color: #444;
+	.entry-body {
 		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
 	}
 
-	.card-link {
-		font-size: 0.85rem;
-		font-weight: 500;
-		color: #111;
+	.entry-body h2 {
+		font-size: clamp(1.4rem, 3vw, 1.9rem);
+		font-weight: 400;
+		letter-spacing: -0.02em;
+		line-height: 1.1;
+	}
+
+	.entry-body p {
+		font-size: 0.9rem;
+		line-height: 1.75;
+		color: #777;
+		max-width: 520px;
+	}
+
+	.entry-arrow {
+		font-size: 1.1rem;
+		color: #ccc;
+		padding-top: 0.2rem;
+		transition: color 0.2s ease, transform 0.2s ease;
 	}
 
 	@media (max-width: 560px) {
-		.cards {
-			grid-template-columns: 1fr;
+		.entry {
+			gap: 1.25rem;
+		}
+
+		.entry-num {
+			display: none;
 		}
 	}
 
 	/* ── Animations ── */
 	@media (prefers-reduced-motion: no-preference) {
 		@keyframes fadeUp {
-			from {
-				opacity: 0;
-				transform: translateY(18px);
-			}
-			to {
-				opacity: 1;
-				transform: translateY(0);
-			}
+			from { opacity: 0; transform: translateY(16px); }
+			to   { opacity: 1; transform: translateY(0); }
 		}
 
 		.name {
-			animation: fadeUp 0.6s ease both;
-			animation-delay: 0.1s;
+			animation: fadeUp 0.6s ease both 0.1s;
 		}
 
 		h1 {
-			animation: fadeUp 0.6s ease both;
-			animation-delay: 0.25s;
+			animation: fadeUp 0.7s ease both 0.2s;
 		}
 
 		.tagline {
-			animation: fadeUp 0.6s ease both;
-			animation-delay: 0.4s;
+			animation: fadeUp 0.7s ease both 0.35s;
 		}
 
-		.video-placeholder {
-			animation: fadeUp 0.6s ease both;
-			animation-delay: 0.55s;
+		.video-invite {
+			animation: fadeUp 0.7s ease both 0.5s;
 		}
 
 		.scroll-hint {
-			animation: fadeUp 0.6s ease both;
-			animation-delay: 0.8s;
+			animation: fadeUp 0.7s ease both 0.75s;
 		}
 
 		/* scroll reveal */
 		.reveal {
 			opacity: 0;
-			transform: translateY(28px);
-			transition: opacity 0.6s ease, transform 0.6s ease;
+			transform: translateY(24px);
+			transition: opacity 0.65s ease, transform 0.65s ease;
 		}
 
 		.reveal.visible {
@@ -222,30 +246,40 @@ import Layout from '../layouts/Layout.astro';
 			transform: translateY(0);
 		}
 
-		.cards .reveal:nth-child(2) {
-			transition-delay: 0.1s;
+		.projects .reveal:nth-child(2) { transition-delay: 0.05s; }
+		.projects .reveal:nth-child(3) { transition-delay: 0.15s; }
+
+		/* entry hover */
+		.entry:hover .entry-num {
+			color: #999;
 		}
 
-		/* card hover */
-		.card:hover {
-			transform: translateY(-4px);
-			box-shadow: 0 8px 28px rgba(0, 0, 0, 0.07);
-			border-color: #d0d0d0;
+		.entry:hover .entry-arrow {
+			color: #111;
+			transform: translate(2px, -2px);
 		}
 	}
 </style>
 
 <script>
+	// Scroll reveal
 	const observer = new IntersectionObserver(
-		(entries) => {
-			entries.forEach((entry) => {
-				if (entry.isIntersecting) {
-					entry.target.classList.add('visible');
-				}
-			});
-		},
+		(entries) => entries.forEach((e) => {
+			if (e.isIntersecting) e.target.classList.add('visible');
+		}),
 		{ threshold: 0.1 }
 	);
-
 	document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+	// Hero content gracefully recedes as projects rise
+	const heroContent = document.querySelector('.hero-content') as HTMLElement;
+	const scrollHint = document.querySelector('.scroll-hint') as HTMLElement;
+	const heroHeight = (document.querySelector('.hero') as HTMLElement).offsetHeight;
+
+	window.addEventListener('scroll', () => {
+		const progress = Math.min(window.scrollY / (heroHeight * 0.55), 1);
+		heroContent.style.opacity = String(1 - progress);
+		heroContent.style.transform = `translateY(${progress * -36}px)`;
+		scrollHint.style.opacity = String(1 - progress * 3);
+	}, { passive: true });
 </script>
