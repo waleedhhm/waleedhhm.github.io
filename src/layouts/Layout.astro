@@ -7,17 +7,32 @@
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Waleed — Portfolio</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
 	</head>
 	<body>
 		<slot />
 	</body>
 </html>
 
-<style>
-	html,
-	body {
+<style is:global>
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
 		margin: 0;
-		width: 100%;
-		height: 100%;
+		padding: 0;
+	}
+
+	html {
+		scroll-behavior: smooth;
+	}
+
+	body {
+		font-family: 'Inter', sans-serif;
+		background: #fff;
+		color: #111;
+		-webkit-font-smoothing: antialiased;
 	}
 </style>
