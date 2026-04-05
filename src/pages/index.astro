@@ -4,11 +4,102 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout>
 
-	<!--
-		Thin spacer — invisible, gives the page enough height to scroll.
-		JS watches scrollY and toggles body.projects-active at the threshold.
-	-->
+	<!-- Spacer: gives the page scroll height so JS can read scrollY -->
 	<div class="spacer"></div>
+
+	<!-- ── Background: sky gradient + SVG landscape ── -->
+	<div class="scene-bg">
+		<!--
+			::before = sunset overlay (fades in over the day sky on projects-active)
+			SVG      = the landscape (always visible, colors transition in-place)
+		-->
+		<svg
+			class="landscape"
+			viewBox="0 0 1440 900"
+			preserveAspectRatio="xMidYMid slice"
+			xmlns="http://www.w3.org/2000/svg"
+		>
+			<!-- Sun: group so all pieces move together on state change -->
+			<g class="sun-group">
+				<circle class="sun-glow-3" cx="1080" cy="192" r="195"/>
+				<circle class="sun-glow-2" cx="1080" cy="192" r="140"/>
+				<circle class="sun-glow-1" cx="1080" cy="192" r="98"/>
+				<circle class="sun-body"   cx="1080" cy="192" r="62"/>
+			</g>
+
+			<!-- Far mountains (most atmospheric, palest) -->
+			<path class="mountain-far" d="
+				M 0,900 L 1440,900
+				L 1440,415
+				C 1320,422 1200,408 1080,393
+				C 950,377 835,358 718,376
+				C 598,393 495,373 375,400
+				C 255,424 138,446 0,432
+				Z
+			"/>
+
+			<!-- River / lake — drawn before mid mountains so peaks naturally occlude the edges -->
+			<ellipse class="river"           cx="672" cy="742" rx="294" ry="21"/>
+			<ellipse class="river-highlight" cx="632" cy="737" rx="138" ry="9"/>
+
+			<!-- Mid mountains (more defined, closer) -->
+			<path class="mountain-mid" d="
+				M 0,900 L 1440,900
+				L 1440,548
+				C 1320,542 1200,557 1078,534
+				C 955,513 838,502 718,522
+				C 596,540 478,526 356,546
+				C 234,565 118,558 0,574
+				Z
+			"/>
+
+			<!-- Mid-distance tree silhouettes (single-tier pines on the near slopes) -->
+			<g class="tree-mid-group">
+				<polygon points="488,642  466,588  510,588"/>
+				<polygon points="616,647  592,592  640,592"/>
+				<polygon points="840,640  818,587  862,587"/>
+				<polygon points="966,645  943,591  989,591"/>
+			</g>
+
+			<!-- Valley floor / foreground hills -->
+			<path class="ground" d="
+				M 0,900 L 1440,900
+				L 1440,752
+				Q 1200,758 960,744
+				Q 720,732 480,746
+				Q 240,760 0,768
+				Z
+			"/>
+
+			<!-- Foreground trees — left cluster (2-tier pines) -->
+			<g class="tree-group">
+				<!-- Tree L1 (large) -->
+				<polygon points=" 92,774   58,703  126,703"/>
+				<polygon points=" 92,716   67,660  117,660"/>
+				<!-- Tree L2 -->
+				<polygon points="172,780  140,711  204,711"/>
+				<polygon points="172,724  148,670  196,670"/>
+				<!-- Tree L3 -->
+				<polygon points="250,772  215,701  285,701"/>
+				<polygon points="250,715  224,661  276,661"/>
+				<!-- Tree L4 (smaller) -->
+				<polygon points="318,782  290,712  346,712"/>
+
+				<!-- Foreground trees — right cluster -->
+				<!-- Tree R1 -->
+				<polygon points="1124,768 1091,699 1157,699"/>
+				<polygon points="1124,712 1101,660 1147,660"/>
+				<!-- Tree R2 -->
+				<polygon points="1204,774 1172,705 1236,705"/>
+				<polygon points="1204,718 1180,666 1228,666"/>
+				<!-- Tree R3 (smaller) -->
+				<polygon points="1280,766 1250,694 1310,694"/>
+				<!-- Tree R4 -->
+				<polygon points="1356,772 1324,703 1388,703"/>
+				<polygon points="1356,716 1332,664 1380,664"/>
+			</g>
+		</svg>
+	</div>
 
 	<!-- ── Panel 1: Hero ── -->
 	<div class="panel hero-panel">
@@ -37,7 +128,7 @@ import Layout from '../layouts/Layout.astro';
 				<span class="entry-num">01</span>
 				<div class="entry-body">
 					<h2>UAL</h2>
-					<p>Research-led work from the MA UX Design programme. Projects that sit at the intersection of systems thinking, service design, and human behaviour — developed through structured critique at the University of the Arts London.</p>
+					<p>Research-led work from the MA UX Design programme. Projects at the intersection of systems thinking, service design, and human behaviour — developed through structured critique at the University of the Arts London.</p>
 				</div>
 				<span class="entry-arrow">↗</span>
 			</a>
@@ -56,33 +147,147 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <style>
-	/* ── Spacer — provides scroll height ── */
+	/* ── Spacer ── */
 	.spacer {
 		height: 140vh;
 		visibility: hidden;
 		pointer-events: none;
 	}
 
-	/* ── Panels ── */
+	/* ────────────────────────────────────────
+	   SCENE BACKGROUND
+	   Day sky = background on .scene-bg itself
+	   Sunset sky = ::before overlay, fades in
+	──────────────────────────────────────── */
+	.scene-bg {
+		position: fixed;
+		inset: 0;
+		z-index: 0;
+		pointer-events: none;
+		/* Day sky: deep steel-blue at top → pale horizon haze at bottom */
+		background: linear-gradient(176deg, #4a98c8 0%, #80c0e0 38%, #b8dff2 72%, #d8f0f8 100%);
+	}
+
+	/* Sunset sky overlay — fades in on projects-active */
+	.scene-bg::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		/* Dusk: deep plum at top → warm terracotta/ember at horizon */
+		background: linear-gradient(176deg, #140820 0%, #3c1030 35%, #8a2430 68%, #c83c1c 100%);
+		opacity: 0;
+		transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	body.projects-active .scene-bg::before { opacity: 1; }
+
+	/* ── Landscape SVG ── */
+	.landscape {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1; /* above ::before overlay */
+	}
+
+	/* ────────────────────────────────────────
+	   SVG ELEMENT COLORS — DAY STATE
+	──────────────────────────────────────── */
+	.sun-glow-3  { fill: rgba(255, 252, 200, 0.07); }
+	.sun-glow-2  { fill: rgba(255, 250, 190, 0.14); }
+	.sun-glow-1  { fill: rgba(255, 248, 180, 0.26); }
+	.sun-body    { fill: #fff8d0; }
+
+	.mountain-far      { fill: #a0bcd4; }
+	.mountain-mid      { fill: #608898; }
+	.river             { fill: #80c0d8; }
+	.river-highlight   { fill: rgba(255, 255, 255, 0.48); }
+	.ground            { fill: #3c5a3e; }
+	.tree-group    polygon { fill: #223c2a; }
+	.tree-mid-group polygon { fill: #2e4c36; }
+
+	/* ────────────────────────────────────────
+	   TRANSITIONS
+	   All fills + parallax transforms
+	──────────────────────────────────────── */
+	.sun-glow-3, .sun-glow-2, .sun-glow-1, .sun-body,
+	.mountain-far, .mountain-mid,
+	.river, .river-highlight, .ground,
+	.tree-group polygon,
+	.tree-mid-group polygon {
+		transition: fill 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	/* Groups and path elements that also shift (parallax) */
+	.sun-group,
+	.tree-group,
+	.tree-mid-group {
+		transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.mountain-far,
+	.mountain-mid,
+	.river,
+	.river-highlight,
+	.ground {
+		transition:
+			fill      0.65s cubic-bezier(0.22, 1, 0.36, 1),
+			transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	/* ────────────────────────────────────────
+	   SVG ELEMENT COLORS — SUNSET STATE
+	──────────────────────────────────────── */
+	body.projects-active .sun-glow-3  { fill: rgba(240, 100, 38, 0.07); }
+	body.projects-active .sun-glow-2  { fill: rgba(240, 108, 42, 0.14); }
+	body.projects-active .sun-glow-1  { fill: rgba(240, 115, 46, 0.24); }
+	body.projects-active .sun-body    { fill: #f06424; }
+
+	body.projects-active .mountain-far    { fill: #7a3858; }
+	body.projects-active .mountain-mid    { fill: #48202e; }
+	body.projects-active .river           { fill: #a83c24; }
+	body.projects-active .river-highlight { fill: rgba(255, 180, 90, 0.42); }
+	body.projects-active .ground          { fill: #1c0c08; }
+	body.projects-active .tree-group    polygon { fill: #100808; }
+	body.projects-active .tree-mid-group polygon { fill: #180e0c; }
+
+	/* Sun moves lower in the sky (sunset) */
+	body.projects-active .sun-group    { transform: translateY(78px); }
+
+	/* Parallax: nearer layers shift more */
+	body.projects-active .mountain-far   { transform: translateX(-6px); }
+	body.projects-active .mountain-mid   { transform: translateX(-14px); }
+	body.projects-active .river          { transform: translateX(-14px); }
+	body.projects-active .river-highlight{ transform: translateX(-14px); }
+	body.projects-active .ground         { transform: translateX(-30px); }
+	body.projects-active .tree-mid-group { transform: translateX(-22px); }
+	body.projects-active .tree-group     { transform: translateX(-38px); }
+
+	/* ────────────────────────────────────────
+	   PANELS
+	──────────────────────────────────────── */
 	.panel {
 		position: fixed;
 		inset: 0;
 		width: 100%;
 		height: 100vh;
 		overflow: hidden;
+		pointer-events: none;
 	}
 
 	/* ── Hero panel ── */
 	.hero-panel {
-		background: linear-gradient(150deg, #fffcf7 0%, #fef3e4 40%, #fde5c8 100%);
-		z-index: 1;
+		z-index: 2;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		padding: 2rem;
+		padding-bottom: 22vh; /* push content into clear sky above mountains */
+		pointer-events: auto;
 		transition:
-			opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-			transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+			opacity   0.45s cubic-bezier(0.22, 1, 0.36, 1),
+			transform 0.50s cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
 	body.projects-active .hero-panel {
@@ -99,7 +304,7 @@ import Layout from '../layouts/Layout.astro';
 		font-weight: 500;
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
-		color: #5a4030;
+		color: #1a3040;
 	}
 
 	.hero-content {
@@ -117,14 +322,16 @@ import Layout from '../layouts/Layout.astro';
 		font-weight: 300;
 		letter-spacing: -0.03em;
 		line-height: 1;
-		color: #1a0f08;
+		color: #0c1e2c;
+		text-shadow: 0 1px 10px rgba(255, 255, 255, 0.55);
 	}
 
 	.tagline {
 		font-size: clamp(1rem, 1.8vw, 1.15rem);
 		font-weight: 300;
-		color: #7a5c44;
+		color: #1e3848;
 		line-height: 1.75;
+		text-shadow: 0 1px 6px rgba(255, 255, 255, 0.45);
 	}
 
 	.video-invite {
@@ -132,18 +339,12 @@ import Layout from '../layouts/Layout.astro';
 		align-items: center;
 		gap: 0.5rem;
 		font-size: 0.85rem;
-		color: #c4a882;
+		color: #4a7088;
 		margin-top: 0.25rem;
 	}
 
-	.play-icon {
-		font-size: 0.6rem;
-	}
-
-	.soon {
-		color: #d9c0a0;
-		font-style: italic;
-	}
+	.play-icon { font-size: 0.6rem; }
+	.soon      { color: #7a9cb0; font-style: italic; }
 
 	.scroll-hint {
 		position: absolute;
@@ -151,26 +352,23 @@ import Layout from '../layouts/Layout.astro';
 		left: 50%;
 		transform: translateX(-50%);
 		font-size: 1rem;
-		color: #c8a882;
+		color: #4878a0;
 		transition: opacity 0.3s ease;
 	}
 
-	body.projects-active .scroll-hint {
-		opacity: 0;
-	}
+	body.projects-active .scroll-hint { opacity: 0; }
 
 	/* ── Projects panel ── */
 	.projects-panel {
-		background: linear-gradient(150deg, #150c18 0%, #3a1628 38%, #7c2e3e 68%, #c44e38 100%);
-		z-index: 0;
-		opacity: 0;
-		transform: translateY(55px);
-		pointer-events: none;
+		z-index: 1;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		padding: 2rem;
+		opacity: 0;
+		transform: translateY(55px);
 		transition:
-			opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+			opacity   0.50s cubic-bezier(0.22, 1, 0.36, 1),
 			transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
@@ -183,7 +381,9 @@ import Layout from '../layouts/Layout.astro';
 	.projects-inner {
 		width: 100%;
 		max-width: 820px;
-		padding: 0 2.5rem;
+		padding: 2.5rem;
+		background: rgba(8, 2, 14, 0.22);
+		border-radius: 6px;
 	}
 
 	.projects-label {
@@ -191,7 +391,7 @@ import Layout from '../layouts/Layout.astro';
 		font-weight: 500;
 		letter-spacing: 0.14em;
 		text-transform: uppercase;
-		color: rgba(255, 210, 185, 0.4);
+		color: rgba(255, 200, 170, 0.42);
 		margin-bottom: 2rem;
 	}
 
@@ -200,20 +400,17 @@ import Layout from '../layouts/Layout.astro';
 		align-items: flex-start;
 		gap: 2rem;
 		padding: 2rem 0;
-		border-top: 1px solid rgba(255, 200, 175, 0.1);
+		border-top: 1px solid rgba(255, 190, 160, 0.12);
 		text-decoration: none;
 		color: inherit;
-		transition: background 0.2s ease;
 	}
 
-	.entry:last-child {
-		border-bottom: 1px solid rgba(255, 200, 175, 0.1);
-	}
+	.entry:last-child { border-bottom: 1px solid rgba(255, 190, 160, 0.12); }
 
 	.entry-num {
 		font-size: 0.72rem;
 		font-weight: 400;
-		color: rgba(255, 210, 185, 0.25);
+		color: rgba(255, 205, 175, 0.25);
 		padding-top: 0.4rem;
 		min-width: 1.5rem;
 		transition: color 0.2s ease;
@@ -227,7 +424,7 @@ import Layout from '../layouts/Layout.astro';
 	}
 
 	.entry-body h2 {
-		font-size: clamp(1.5rem, 3vw, 2rem);
+		font-size: clamp(1.4rem, 2.8vw, 1.9rem);
 		font-weight: 300;
 		letter-spacing: -0.02em;
 		line-height: 1.1;
@@ -237,36 +434,38 @@ import Layout from '../layouts/Layout.astro';
 	.entry-body p {
 		font-size: 0.88rem;
 		line-height: 1.8;
-		color: rgba(255, 215, 190, 0.6);
+		color: rgba(255, 210, 185, 0.6);
 		max-width: 500px;
 	}
 
 	.entry-arrow {
 		font-size: 1.1rem;
-		color: rgba(255, 210, 185, 0.3);
+		color: rgba(255, 200, 170, 0.28);
 		padding-top: 0.25rem;
 		transition: color 0.2s ease, transform 0.2s ease;
 	}
 
 	@media (max-width: 560px) {
-		.entry-num { display: none; }
-		.entry { gap: 1.25rem; }
+		.entry-num  { display: none; }
+		.entry      { gap: 1.25rem; }
 	}
 
-	/* ── Animations ── */
+	/* ────────────────────────────────────────
+	   ANIMATIONS
+	──────────────────────────────────────── */
 	@media (prefers-reduced-motion: no-preference) {
 		@keyframes fadeUp {
 			from { opacity: 0; transform: translateY(16px); }
 			to   { opacity: 1; transform: translateY(0); }
 		}
 
-		.name         { animation: fadeUp 0.6s ease both 0.1s; }
-		h1            { animation: fadeUp 0.7s ease both 0.2s; }
-		.tagline      { animation: fadeUp 0.7s ease both 0.35s; }
-		.video-invite { animation: fadeUp 0.7s ease both 0.5s; }
-		.scroll-hint  { animation: fadeUp 0.7s ease both 0.75s; }
+		.name         { animation: fadeUp 0.6s ease both 0.10s; }
+		h1            { animation: fadeUp 0.7s ease both 0.22s; }
+		.tagline      { animation: fadeUp 0.7s ease both 0.38s; }
+		.video-invite { animation: fadeUp 0.7s ease both 0.52s; }
+		.scroll-hint  { animation: fadeUp 0.7s ease both 0.78s; }
 
-		.entry:hover .entry-num   { color: rgba(255, 210, 185, 0.6); }
+		.entry:hover .entry-num   { color: rgba(255, 205, 175, 0.6); }
 		.entry:hover .entry-arrow { color: #fff; transform: translate(3px, -3px); }
 	}
 </style>
