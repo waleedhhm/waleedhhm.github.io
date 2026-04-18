@@ -1,0 +1,218 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout>
+	<div class="page">
+
+		<!-- ── Header ── -->
+		<header class="site-header">
+			<a href="/" class="back-link">← Waleed</a>
+			<span class="section-label">UAL</span>
+		</header>
+
+		<!-- ── Project intro ── -->
+		<section class="intro">
+			<p class="project-num">01</p>
+			<h1>Macro UX</h1>
+			<p class="meta">MA UX Design · University of the Arts London · 2024–25</p>
+			<p class="description">
+				<!-- Add your project description here -->
+				A brief description of what Macro UX is and what it set out to explore.
+			</p>
+		</section>
+
+		<!-- ── Weekly blogs ── -->
+		<section class="weeks">
+			<p class="weeks-label">Process</p>
+
+			<article class="week">
+				<div class="week-header">
+					<span class="week-num">Week 01</span>
+					<h2>Title goes here</h2>
+				</div>
+				<div class="week-body">
+					<p>Your notes for this week go here. Write as much or as little as you like — this is your space to reflect on what happened, what you made, what you learned.</p>
+					<!-- To add an image: drop it in src/assets/case-studies/ and tell Claude -->
+				</div>
+			</article>
+
+			<article class="week">
+				<div class="week-header">
+					<span class="week-num">Week 02</span>
+					<h2>Title goes here</h2>
+				</div>
+				<div class="week-body">
+					<p>Your notes for this week go here.</p>
+				</div>
+			</article>
+
+			<article class="week">
+				<div class="week-header">
+					<span class="week-num">Week 03</span>
+					<h2>Title goes here</h2>
+				</div>
+				<div class="week-body">
+					<p>Your notes for this week go here.</p>
+				</div>
+			</article>
+
+			<article class="week">
+				<div class="week-header">
+					<span class="week-num">Week 04</span>
+					<h2>Title goes here</h2>
+				</div>
+				<div class="week-body">
+					<p>Your notes for this week go here.</p>
+				</div>
+			</article>
+
+			<article class="week">
+				<div class="week-header">
+					<span class="week-num">Week 05</span>
+					<h2>Title goes here</h2>
+				</div>
+				<div class="week-body">
+					<p>Your notes for this week go here.</p>
+				</div>
+			</article>
+
+		</section>
+
+	</div>
+</Layout>
+
+<style>
+	.page {
+		max-width: 740px;
+		margin: 0 auto;
+		padding: 0 2rem 8rem;
+	}
+
+	/* ── Header ── */
+	.site-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 2rem 0;
+		border-bottom: 1px solid #e8e8e8;
+		margin-bottom: 5rem;
+	}
+
+	.back-link {
+		font-size: 0.82rem;
+		font-weight: 500;
+		letter-spacing: 0.02em;
+		color: #888;
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+
+	.back-link:hover { color: #111; }
+
+	.section-label {
+		font-size: 0.72rem;
+		font-weight: 500;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: #bbb;
+	}
+
+	/* ── Intro ── */
+	.intro {
+		margin-bottom: 6rem;
+	}
+
+	.project-num {
+		font-size: 0.72rem;
+		font-weight: 400;
+		letter-spacing: 0.1em;
+		color: #ccc;
+		margin-bottom: 1.25rem;
+	}
+
+	h1 {
+		font-size: clamp(2.8rem, 7vw, 4.5rem);
+		font-weight: 300;
+		letter-spacing: -0.03em;
+		line-height: 1.05;
+		color: #0d0d0d;
+		margin-bottom: 1rem;
+	}
+
+	.meta {
+		font-size: 0.8rem;
+		font-weight: 400;
+		color: #aaa;
+		letter-spacing: 0.02em;
+		margin-bottom: 2rem;
+	}
+
+	.description {
+		font-size: 1.05rem;
+		font-weight: 300;
+		line-height: 1.85;
+		color: #444;
+		max-width: 580px;
+	}
+
+	/* ── Weeks ── */
+	.weeks-label {
+		font-size: 0.72rem;
+		font-weight: 500;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: #ccc;
+		margin-bottom: 2rem;
+	}
+
+	.week {
+		padding: 2.5rem 0;
+		border-top: 1px solid #ebebeb;
+	}
+
+	.week:last-child {
+		border-bottom: 1px solid #ebebeb;
+	}
+
+	.week-header {
+		display: flex;
+		align-items: baseline;
+		gap: 1.5rem;
+		margin-bottom: 1.25rem;
+	}
+
+	.week-num {
+		font-size: 0.72rem;
+		font-weight: 400;
+		letter-spacing: 0.1em;
+		color: #ccc;
+		min-width: 4.5rem;
+		flex-shrink: 0;
+	}
+
+	h2 {
+		font-size: clamp(1.2rem, 2.5vw, 1.55rem);
+		font-weight: 300;
+		letter-spacing: -0.02em;
+		line-height: 1.2;
+		color: #111;
+	}
+
+	.week-body {
+		padding-left: 6rem;
+	}
+
+	.week-body p {
+		font-size: 0.95rem;
+		line-height: 1.85;
+		color: #555;
+		max-width: 520px;
+	}
+
+	@media (max-width: 560px) {
+		.week-header { flex-direction: column; gap: 0.4rem; }
+		.week-body   { padding-left: 0; }
+		.week-num    { display: none; }
+	}
+</style>
